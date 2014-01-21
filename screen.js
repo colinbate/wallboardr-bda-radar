@@ -7,6 +7,7 @@ define(['require', './admin'], function (require) {
           getViewData: function () {
             return {
               url: self.props.data.url,
+              bgcolor: self.props.data.bgcolor,
               forcefull: self.props.data.forcefull,
               wrapclass: self.props.data.forcefull ? 'force-fullscreen' : 'img-wrapper',
               caption: null
