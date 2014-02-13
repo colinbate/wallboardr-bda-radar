@@ -1,9 +1,7 @@
 <div class="form-panel">
-  <input type="text" placeholder="Enter image URL" rows="4" ng-model="activeScreenEdit.data.url" required>
-  <input type="text" placeholder="Optional background color" ng-model="activeScreenEdit.data.bgcolor">
   <div class="form-container">
-    <input id="editScreenForceFull" type="checkbox" ng-model="activeScreenEdit.data.forcefull" class="css-checkbox">
-    <label for="editScreenForceFull" class="css-label">Force to full screen (even if smaller)</label>
+    <input id="editScreenAnimate" type="checkbox" ng-model="activeScreenEdit.data.animate" class="css-checkbox">
+    <label for="editScreenAnimate" class="css-label">Animate radar (defaults to last image)</label>
   </div>
   <div class="buttons">
     <button ng-click="updateActiveScreen(editScreenForm)" class="success">Save</button>
