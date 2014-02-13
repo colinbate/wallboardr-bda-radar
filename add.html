@@ -1,9 +1,7 @@
 <div class="form-panel">
-  <input type="text" placeholder="Enter image URL" ng-model="newScreenForm.data.url" required>
-  <input type="text" placeholder="Optional background color" ng-model="newScreenForm.data.bgcolor">
   <div class="form-container">
-    <input id="newScreenForceFull" type="checkbox" ng-model="newScreenForm.data.forcefull" class="css-checkbox">
-    <label for="newScreenForceFull" class="css-label">Force to full screen (even if smaller)</label>
+    <input id="newScreenAnimate" type="checkbox" ng-model="newScreenForm.data.animate" class="css-checkbox">
+    <label for="newScreenAnimate" class="css-label">Animate radar (defaults to last image)</label>
   </div>
   <div class="buttons">
     <button ng-click="addScreen(newScreenForm)" class="success">Add</button>
