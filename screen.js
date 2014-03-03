@@ -1,7 +1,7 @@
 define(['boards/data-loader', 'require', './admin'], function (dataLoader, require) {
   'use strict';
   var plugin = require('./admin'),
-      localScreen = function () {
+      localScreen = function ($) {
         var self = this,
             findServerProxy = function () {
               if (self.globalConfig && self.globalConfig.externalProxy) {
@@ -9,8 +9,8 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
               }
               return false;
             },
-            makeRequest = function (url, data) {
-              url = 'www.weather.bm/radarLarge.asp';
+            makeRequest = function () {
+              var url = 'www.weather.bm/radarLarge.asp';
               return dataLoader({
                 url: url,
                 dataType: 'html',
@@ -32,7 +32,6 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
             if (self.props.data.animate && !self.animating) {
               self.animating = true;
               timer = setInterval(function () {
-                var ts;
                 if (!self.$screen.is(':visible')) {
                   self.animating = false;
                   clearInterval(timer);
