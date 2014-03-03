@@ -1,14 +1,21 @@
 define(['boards/data-loader', 'require', './admin'], function (dataLoader, require) {
   'use strict';
   var plugin = require('./admin'),
-      localScreen = function ($) {
+      localScreen = function () {
         var self = this,
+            findServerProxy = function () {
+              if (self.globalConfig && self.globalConfig.externalProxy) {
+                return self.globalConfig.externalProxy.host + ':' + self.globalConfig.externalProxy.port;
+              }
+              return false;
+            },
             makeRequest = function (url, data) {
               url = 'www.weather.bm/radarLarge.asp';
               return dataLoader({
                 url: url,
                 dataType: 'html',
                 proxy: true,
+                serverProxy: findServerProxy(),
                 filter: function (page) {
                   var $radarDiv = $(page).find('.RadarImage');
                   $radarDiv.find('img').attr('src', function (i, val) {
