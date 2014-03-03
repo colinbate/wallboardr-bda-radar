@@ -1,36 +1,27 @@
-define(['require', './admin'], function (require) {
+define(['boards/data-loader', 'require', './admin'], function (dataLoader, require) {
   'use strict';
   var plugin = require('./admin'),
       localScreen = function ($) {
         var self = this,
-            padLeft = function (val, width, padWith) {
-              width = width || 2;
-              padWith = padWith || '0';
-              val = '' + val;
-              while (val.length < width) {
-                val = padWith + val;
-              }
-              return val;
-            },
-            formatRadarTime = function (date) {
-              var d = date.getFullYear() + '-' + padLeft(date.getMonth() + 1) + '-' + padLeft(date.getDate()),
-                  t = padLeft(date.getHours()) + padLeft(date.getMinutes());
-              return d + '-' + t;
-            },
-            getNthLastRadarTime = function (n) {
-              var now = new Date(),
-                  nth = now.getMinutes() - (n * 10);
-              nth = Math.floor((nth - 5) / 10) * 10 + 3;
-              now.setMinutes(nth);
-              return formatRadarTime(now);
-            },
-            getRadarUrl = function (stamp) {
-              return 'http://www.weather.bm/images/radarImagery2/westatlantic-radar-' + stamp + '.png';
+            makeRequest = function (url, data) {
+              url = 'www.weather.bm/radarLarge.asp';
+              return dataLoader({
+                url: url,
+                dataType: 'html',
+                proxy: true,
+                filter: function (page) {
+                  var $radarDiv = $(page).find('.RadarImage');
+                  $radarDiv.find('img').attr('src', function (i, val) {
+                    return 'http://www.weather.bm' + val;
+                  }).removeAttr('width').removeAttr('height');
+                  return $radarDiv.html();
+                }
+              });
             };
 
         return {
           postShow: function () {
-            var timer, index = 9;
+            var timer, index = 0;
             if (self.props.data.animate && !self.animating) {
               self.animating = true;
               timer = setInterval(function () {
@@ -40,30 +31,28 @@ define(['require', './admin'], function (require) {
                   clearInterval(timer);
                   return;
                 }
-                if (index < 0) {
-                  if (index === -4) {
-                    index = 9;
+                if (index >= 9) {
+                  if (index === 13) {
+                    index = -1;
                   } else {
-                    index -= 1;
+                    index += 1;
                     return;
                   }
                 }
-                ts = getNthLastRadarTime(index);
-                index -= 1;
-                self.$screen.find('.radar-img').css({'background-image': 'url(' + getRadarUrl(ts) + ')'});
+                index += 1;
+                self.$screen.find('.radar-img img').hide().filter('#Img_' + index).show();
               }, 800);
 
             }
           },
           getViewData: function () {
-            var timestamp = getNthLastRadarTime(0);
-            return {
-              url: getRadarUrl(timestamp),
-              bgcolor: '#10105D',
-              forcefull: true,
-              wrapclass: 'force-fullscreen',
-              caption: null
-            };
+            return makeRequest().then(function (frag) {
+              return {
+                imgs: frag,
+                bgcolor: '#10105D',
+                wrapclass: 'img-wrapper'
+              };
+            });
           }
         };
       };
