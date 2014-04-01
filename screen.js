@@ -32,7 +32,7 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
             if (self.props.data.animate && !self.animating) {
               self.animating = true;
               timer = setInterval(function () {
-                if (!self.$screen.is(':visible')) {
+                if (!self.$screen || !self.$screen.is(':visible')) {
                   self.animating = false;
                   clearInterval(timer);
                   return;
