@@ -28,7 +28,8 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
 
         return {
           postShow: function () {
-            var timer, index = 0;
+            var timer;
+            self.animindex = self.animindex || 0;
             if (self.props.data.animate && !self.animating) {
               self.animating = true;
               timer = setInterval(function () {
@@ -37,16 +38,16 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
                   clearInterval(timer);
                   return;
                 }
-                if (index >= 9) {
-                  if (index === 13) {
-                    index = -1;
+                if (self.animindex >= 9) {
+                  if (self.animindex === 13) {
+                    self.animindex = -1;
                   } else {
-                    index += 1;
+                    self.animindex += 1;
                     return;
                   }
                 }
-                index += 1;
-                self.$screen.find('.radar-img img').hide().filter('#Img_' + index).show();
+                self.animindex += 1;
+                self.$screen.find('.radar-img img').hide().filter('#Img_' + self.animindex).show();
               }, 800);
 
             }
