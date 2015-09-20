@@ -10,14 +10,14 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
               return false;
             },
             makeRequest = function () {
-              var url = 'www.weather.bm/radarLarge.asp';
+              var url = 'www.weather.bm/tools/animateimages.asp?name=RADAR_250KM_SRI';
               return dataLoader({
                 url: url,
                 dataType: 'html',
                 proxy: true,
                 serverProxy: findServerProxy(),
                 filter: function (page) {
-                  var $radarDiv = $(page).find('.RadarImage');
+                  var $radarDiv = $(page).find('.ImageWrapper');
                   $radarDiv.find('img').attr('src', function (i, val) {
                     return 'http://www.weather.bm' + val;
                   }).removeAttr('width').removeAttr('height');
@@ -51,6 +51,10 @@ define(['boards/data-loader', 'require', './admin'], function (dataLoader, requi
               }, 800);
 
             }
+          },
+          preShow: function () {
+            var sHeight = self.$screen.height();
+            self.$screen.find('.radar-img').width(sHeight);
           },
           getViewData: function () {
             return makeRequest().then(function (frag) {
